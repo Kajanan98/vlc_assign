@@ -6,6 +6,7 @@ import Main from "./src/navigation/index";
 export default function App() {
   return (
 
+    
     <AuthProvider>
       <ThemeProvider>
        <Main />
