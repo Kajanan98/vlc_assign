@@ -96,6 +96,8 @@ const getBinData=(signals)=>{
             // console.log(groupIndex + 1,frameTime, "+" )
         }
     }
+    console.log(signalsWithTime);
+    console.log(groups);
 
     const binData = groups.map(group => Math.round(group.length? group.reduce((a,b)=>a+b) / group.length : 0))
     return binData

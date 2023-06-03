@@ -47,14 +47,13 @@ export default function ReadingScreenTF({onBack}) {
       await Camera.requestCameraPermissionsAsync();
 
       // Wait for tfjs to initialize the backend.
-      console.log("tf");
+      // console.log("tf");
       await tf.ready();
       // await tf.setBackend("cpu");
-      console.log("tf end");
+      // console.log("tf end");
 
       const model = await mobilenet.load();
       setModel(model);
-      console.log("model loaded");
 
       // Ready!
       setTfReady(true);
@@ -73,13 +72,16 @@ export default function ReadingScreenTF({onBack}) {
   }, []);
 
   useEffect(() => {
-    const framesPerSecond = Math.max(4,fps)
-    const zeros= ((5* unitTime) /(1000/framesPerSecond))
-    if(startedScanning && receivedData.length > zeros && !receivedData.slice(receivedData.length-zeros).find(n=> n[0] != 0) ){
-      setDone(true)
-      setMessage(decodeBinToMessage(decodeToBin(receivedData)))
+    const framesPerSecond = Math.max(4, fps);
+    const zeros = (5 * unitTime) / (1000 / framesPerSecond);
+    if (
+      startedScanning &&
+      receivedData.length > zeros &&
+      !receivedData.slice(receivedData.length - zeros).find((n) => n[0] != 0)
+    ) {
+      setDone(true);
+      setMessage(decodeBinToMessage(decodeToBin(receivedData)));
     }
-    // console.log(receivedData)
   }, [receivedData]);
 
 
