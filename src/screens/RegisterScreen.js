@@ -30,183 +30,184 @@ export default function RegisterScreen({navigation}) {
 
   const [view, setView] = useState(false);
 
-  const {isLoggedIn, login, logout} = useContext(AuthContext);
+  const { signup } = useContext(AuthContext);
 
   const schema = yup.object().shape({
-    username: yup.string().required(),
+    email: yup.string().email().required(),
     firstName: yup.string().required(),
     lastName: yup.string().required(),
-    password: yup.string()
-    .required('Password is required')
-    .min(8, 'Password must be at least 8 characters long')
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-      'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
-    ),
-    confirmPassword: yup.string()
-    .oneOf([yup.ref('password'), null], 'Passwords must match')
-    .required('Confirm Password is required'),
+    password: yup
+      .string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters long")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+      ),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("password"), null], "Passwords must match")
+      .required("Confirm Password is required"),
   });
 
-  const {   setValue, register, handleSubmit,  formState: { errors },getValues, reset } = useForm({
-      resolver: yupResolver(schema)
+  const {
+    setValue,
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    reset,
+  } = useForm({
+    resolver: yupResolver(schema),
   });
 
   const onSubmitHandler = (data) => {
     console.log({ data });
-    login()
+    signup(data);
   };
- 
 
-    return (
-          
-            <View style={styles.container}>
-              <KeyboardAvoidingView >
-              <KeyboardAwareScrollView style={styles.content}  >
+  return (
+    <View style={styles.container}>
+      <KeyboardAvoidingView>
+        <KeyboardAwareScrollView style={styles.content}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.subContainer}>
+              <Text style={styles.logoText}>Register</Text>
 
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                  <View style={styles.subContainer}>
-                 
-                      <Text style={styles.logoText}>Register</Text>
-                   
-                    <View style={styles.inputContainer}>
-                      <TextInput
-                        placeholder="Username"
-                        placeholderTextColor="#666666"
-                        name = "username"
-                        onChangeText={(text) => setValue('username',  text )}
-                        label='UserName'
-                        style={styles.input}
-                      />
-                    </View>
-                    { errors.username ?  
-                      <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>{errors.username?.message }</Text>
-                      </Animatable.View>
-                        :
-                      null
-                    }
+              <View style={styles.inputContainer}>
+                <TextInput
+                  placeholder="Email"
+                  placeholderTextColor="#666666"
+                  name="email"
+                  onChangeText={(text) => setValue("email", text)}
+                  label="email"
+                  style={styles.input}
+                />
+              </View>
+              {errors.email ? (
+                <Animatable.View animation="fadeInLeft" duration={500}>
+                  <Text style={styles.errorMsg}>{errors.email?.message}</Text>
+                </Animatable.View>
+              ) : null}
 
-                    <View style={styles.inputContainer}>
-                      <TextInput
-                        placeholder="First Name"
-                        placeholderTextColor="#666666"
-                        name = "firstName"
-                        onChangeText={(text) => setValue('firstName',  text )}
-                        label='First Name'
-                        style={styles.input}
-                      />
-                    </View>
-                    { errors.firstName ?  
-                      <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>{errors.firstName?.message }</Text>
-                      </Animatable.View>
-                        :
-                      null
-                    }
+              <View style={styles.inputContainer}>
+                <TextInput
+                  placeholder="First Name"
+                  placeholderTextColor="#666666"
+                  name="firstName"
+                  onChangeText={(text) => setValue("firstName", text)}
+                  label="First Name"
+                  style={styles.input}
+                />
+              </View>
+              {errors.firstName ? (
+                <Animatable.View animation="fadeInLeft" duration={500}>
+                  <Text style={styles.errorMsg}>
+                    {errors.firstName?.message}
+                  </Text>
+                </Animatable.View>
+              ) : null}
 
-                    <View style={styles.inputContainer}>
-                      <TextInput
-                        placeholder="Last Name"
-                        placeholderTextColor="#666666"
-                        name = "lastName"
-                        label='Last Name'
-                        onChangeText={(text) => setValue('lastName',  text )}
-                        style={styles.input}
-                      />
-                    </View>
-                    { errors.lastName ?  
-                      <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>{errors.lastName?.message }</Text>
-                      </Animatable.View>
-                        :
-                      null
-                    }
+              <View style={styles.inputContainer}>
+                <TextInput
+                  placeholder="Last Name"
+                  placeholderTextColor="#666666"
+                  name="lastName"
+                  label="Last Name"
+                  onChangeText={(text) => setValue("lastName", text)}
+                  style={styles.input}
+                />
+              </View>
+              {errors.lastName ? (
+                <Animatable.View animation="fadeInLeft" duration={500}>
+                  <Text style={styles.errorMsg}>
+                    {errors.lastName?.message}
+                  </Text>
+                </Animatable.View>
+              ) : null}
 
-                    <View style={styles.inputContainer}>
-                  
-                      <TextInput
-                        placeholder="Password"
-                        placeholderTextColor="#666666"
-                        label="Password"
-                        name="password"
-                        onChangeText={(text) => setValue('password',  text )}
-                        secureTextEntry={!view}
-                        style={styles.input}
-                      />
-                      <TouchableOpacity onPress={() => setView(!view)} style={styles.eyeIconContainer}>
-                          {!view ? (
-                          <Feather name="eye-off" color="grey" size={20} />
-                          ) : (
-                          <Feather name="eye" color="grey" size={20} />
-                          )}
-                      </TouchableOpacity>
-                    </View>
-                    { errors.password ?  
-                      <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>{errors.password?.message }</Text>
-                      </Animatable.View>
-                        :
-                      null
-                    }
+              <View style={styles.inputContainer}>
+                <TextInput
+                  placeholder="Password"
+                  placeholderTextColor="#666666"
+                  label="Password"
+                  name="password"
+                  onChangeText={(text) => setValue("password", text)}
+                  secureTextEntry={!view}
+                  style={styles.input}
+                />
+                <TouchableOpacity
+                  onPress={() => setView(!view)}
+                  style={styles.eyeIconContainer}
+                >
+                  {!view ? (
+                    <Feather name="eye-off" color="grey" size={20} />
+                  ) : (
+                    <Feather name="eye" color="grey" size={20} />
+                  )}
+                </TouchableOpacity>
+              </View>
+              {errors.password ? (
+                <Animatable.View animation="fadeInLeft" duration={500}>
+                  <Text style={styles.errorMsg}>
+                    {errors.password?.message}
+                  </Text>
+                </Animatable.View>
+              ) : null}
 
-                  <View style={styles.inputContainer}>
-                    
-                    <TextInput
-                      placeholder="Confirm Password"
-                      placeholderTextColor="#666666"
-                      label="Confirm Password"
-                      secureTextEntry={!view}
-                      style={styles.input}
-                      onChangeText={(text) => setValue('confirmPassword',  text )}
-                    />
-                    <TouchableOpacity onPress={() => setView(!view)} style={styles.eyeIconContainer}>
-                        {!view ? (
-                        <Feather name="eye-off" color="grey" size={20} />
-                        ) : (
-                        <Feather name="eye" color="grey" size={20} />
-                        )}
-                    </TouchableOpacity>
-                  </View>
-                  { errors.confirmPassword ?  
-                    <Animatable.View animation="fadeInLeft" duration={500}>
-                      <Text style={styles.errorMsg}>{errors.confirmPassword?.message }</Text>
-                    </Animatable.View>
-                      :
-                    null
-                  }
-              
-                      
-                    <TouchableOpacity 
-                      style={styles.loginButton} 
-                      onPress={handleSubmit(onSubmitHandler)}
-                    >
-                      <Text style={styles.buttonText}> SignUp </Text>
-                    </TouchableOpacity>
-                    <View style={styles.guideContainer}>
-                      <Text >
-                        Already have an Account?
-                        <Text 
-                          onPress={() => navigation.navigate('LoginScreen')}
-                          allowFontScaling={false}
-                          style={styles.guideText}
-                        >
-                          {`\u00A0`}
-                          SignIn
-                        </Text>
-                          
-                      </Text>
-                    </View>
-                   
-                  </View> 
-                </TouchableWithoutFeedback>
-              </KeyboardAwareScrollView>
-              </KeyboardAvoidingView>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  placeholder="Confirm Password"
+                  placeholderTextColor="#666666"
+                  label="Confirm Password"
+                  secureTextEntry={!view}
+                  style={styles.input}
+                  onChangeText={(text) => setValue("confirmPassword", text)}
+                />
+                <TouchableOpacity
+                  onPress={() => setView(!view)}
+                  style={styles.eyeIconContainer}
+                >
+                  {!view ? (
+                    <Feather name="eye-off" color="grey" size={20} />
+                  ) : (
+                    <Feather name="eye" color="grey" size={20} />
+                  )}
+                </TouchableOpacity>
+              </View>
+              {errors.confirmPassword ? (
+                <Animatable.View animation="fadeInLeft" duration={500}>
+                  <Text style={styles.errorMsg}>
+                    {errors.confirmPassword?.message}
+                  </Text>
+                </Animatable.View>
+              ) : null}
+
+              <TouchableOpacity
+                style={styles.loginButton}
+                onPress={handleSubmit(onSubmitHandler)}
+              >
+                <Text style={styles.buttonText}> SignUp </Text>
+              </TouchableOpacity>
+              <View style={styles.guideContainer}>
+                <Text>
+                  Already have an Account?
+                  <Text
+                    onPress={() => navigation.navigate("LoginScreen")}
+                    allowFontScaling={false}
+                    style={styles.guideText}
+                  >
+                    {`\u00A0`}
+                    SignIn
+                  </Text>
+                </Text>
+              </View>
             </View>
-
-        
-     
-    )
+          </TouchableWithoutFeedback>
+        </KeyboardAwareScrollView>
+      </KeyboardAvoidingView>
+    </View>
+  );
   
 }
 

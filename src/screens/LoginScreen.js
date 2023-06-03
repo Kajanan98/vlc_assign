@@ -28,7 +28,7 @@ export default function LoginScreen({navigation}) {
 
 
   const schema = yup.object().shape({
-    username: yup.string().required('User Name is required'),
+    email: yup.string().email().required('Email is required'),
     password: yup.string()
     .required('Password is required')
     // .min(8, 'Password must be at least 8 characters long')
@@ -41,8 +41,8 @@ export default function LoginScreen({navigation}) {
   const {   setValue, register, handleSubmit,  formState: { errors }, getValues, reset } = useForm({
       resolver: yupResolver(schema),
       defaultValues: {
-        username: 'hi', 
-        password: 'hi', 
+        email: '',
+        password: '',
       },
   });
 
@@ -77,7 +77,7 @@ export default function LoginScreen({navigation}) {
    const onSubmitHandler = (data) => {
     console.log({ data });
     // Perform any necessary actions with the form data
-    login()
+    login(data)
   };
  
 
@@ -103,18 +103,18 @@ export default function LoginScreen({navigation}) {
                     }
                     <View style={styles.inputContainer}>
                       <TextInput
-                        placeholder="Username"
+                        placeholder="Email"
                         placeholderTextColor="#666666"
-                        name = "username"
+                        name = "email"
                         autoCapitalize="none"
-                        onChangeText={(text) => setValue('username',  text )}
-                        label='UserName'
+                        onChangeText={(text) => setValue('email',  text )}
+                        label='Email'
                         style={styles.input}
                       />
                     </View>
-                    { errors.username ?  
+                    { errors.email ?
                       <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>{errors.username?.message }</Text>
+                        <Text style={styles.errorMsg}>{errors.email?.message }</Text>
                       </Animatable.View>
                         :
                       null

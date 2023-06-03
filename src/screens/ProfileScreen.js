@@ -16,7 +16,7 @@ import useStyle from "../hooks/useStyles";
 
 export default function ProfileScreen() {
 
-  const {isLoggedIn, login, logout} = useContext(AuthContext)
+  const { logout, deleteAccount, user, userDetails } = useContext(AuthContext);
 
   const styles = useStyle(customStyles);
 
@@ -24,10 +24,15 @@ export default function ProfileScreen() {
     <View style={styles.container}>
       <View style={styles.userCard}>
         <View>
-          <Image source={require('../assets/images/profile.jpg')} style={styles.userPhoto} />
+          <Image
+            source={require("../assets/images/profile.jpg")}
+            style={styles.userPhoto}
+          />
         </View>
         <View style={styles.userInfo}>
-          <Text style={styles.userName}>John Doe</Text>
+          <Text style={styles.userName}>
+            {userDetails?.firstName || "John Doe"}
+          </Text>
           <Text style={styles.userFollowers}>1000 followers</Text>
         </View>
         <Text style={styles.signOutText} onPress={logout}>
@@ -38,22 +43,21 @@ export default function ProfileScreen() {
         </TouchableOpacity> */}
       </View>
       <ScrollView>
-        <RecentActivity/>
-          <View style={styles.deactivateButton}>
-          <TouchableOpacity
-            style={styles.deactivate}              
-          >
-                  
-          <Text style={{
-            color:'#ffffff',
-            paddingHorizontal:60
-            }}> Deactivate Account</Text>
-                  
+        <RecentActivity />
+        <View style={styles.deactivateButton}>
+          <TouchableOpacity style={styles.deactivate} onPress={deleteAccount}>
+            <Text
+              style={{
+                color: "#ffffff",
+                paddingHorizontal: 60,
+              }}
+            >
+              {" "}
+              Delete Account
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      
-     
     </View>
   );
 }
