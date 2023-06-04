@@ -2,6 +2,9 @@ import React, { useState, useEffect, createContext } from "react";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 
+import * as tf from "@tensorflow/tfjs";
+import * as mobilenet from "@tensorflow-models/mobilenet";
+
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
@@ -10,8 +13,9 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const usersCollection = firestore().collection("Users");
+  const [model, setModel] = useState(null);
 
-  console.log(user);
+  // console.log(user);
   function onAuthStateChanged(user) {
     setUser(user);
     setIsLoggedIn(user && user.email ? true : false);
@@ -21,6 +25,22 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
+  }, []);
+
+  useEffect(() => {
+    async function prepare() {
+      console.log("tf");
+      await tf.ready();
+      // await tf.setBackend("cpu");
+      console.log("tf end");
+
+      const model = await mobilenet.load();
+      setModel(model);
+
+      // Ready!
+      console.log("Prepare done in auth");
+    }
+    prepare();
   }, []);
 
   const signup = (data) => {
@@ -66,7 +86,6 @@ const AuthProvider = ({ children }) => {
           .then((userDetails) => {
             if (userDetails.exists) {
               setUserDetails(userDetails.data());
-              console.log(userDetails.data());
               console.log("User data fetched!");
             } else {
               console.log("User data Not Found!");
@@ -137,6 +156,7 @@ const AuthProvider = ({ children }) => {
         userDetails,
         signup,
         deleteAccount,
+        model,
       }}
     >
       {children}

@@ -7,6 +7,7 @@ import {
   Platform,
   TouchableOpacity,
 } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import useStyle from "../../hooks/useStyles";
 
 import { Camera } from "expo-camera";
@@ -14,10 +15,8 @@ import { Camera } from "expo-camera";
 import * as tf from "@tensorflow/tfjs";
 
 import { cameraWithTensors } from "@tensorflow/tfjs-react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { decodeToBin, decodeBinToMessage } from "../../utils/vlc/decode";
-import ShowMessage from "./ShowMessage";
 import { AuthContext } from "../../contexts/AuthProvider";
 
 // tslint:disable-next-line: variable-name
@@ -33,12 +32,11 @@ const OUTPUT_TENSOR_WIDTH = 180;
 const OUTPUT_TENSOR_HEIGHT = OUTPUT_TENSOR_WIDTH / (IS_IOS ? 9 / 16 : 3 / 4);
 
 const unitTime = 1000;
-export default function ReadingScreenTF({ onBack }) {
+export default function MessageReading({ onReadStop, onReadFinish }) {
   const cameraRef = useRef(null);
   const [tfReady, setTfReady] = useState(false);
   const [startedScanning, setStartedScanning] = useState(false);
   const [done, setDone] = useState(false);
-  const [message, setMessage] = useState(null);
   const [fps, setFps] = useState(0);
   const [spot, setSpot] = useState(0);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
@@ -47,6 +45,7 @@ export default function ReadingScreenTF({ onBack }) {
   const { model } = useContext(AuthContext);
 
   const rafId = useRef(null);
+
   const styles = useStyle(customStyles);
 
   useEffect(() => {
@@ -55,22 +54,12 @@ export default function ReadingScreenTF({ onBack }) {
 
       // Camera permission.
       await Camera.requestCameraPermissionsAsync();
-
-      // // Wait for tfjs to initialize the backend.
-      // // console.log("tf");
-      // await tf.ready();
-      // // await tf.setBackend("cpu");
-      // // console.log("tf end");
-
-      // const model = await mobilenet.load();
-      // setModel(model);
-
       // // Ready!
       while (model == null) {
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
       setTfReady(true);
-      console.log("Prepare done");
+      console.log("Prepare done in chat");
     }
     prepare();
   }, [model]);
@@ -93,9 +82,13 @@ export default function ReadingScreenTF({ onBack }) {
       !receivedData.slice(receivedData.length - zeros).find((n) => n[0] != 0)
     ) {
       setDone(true);
-      setMessage(decodeBinToMessage(decodeToBin(receivedData)));
+      onDone(decodeBinToMessage(decodeToBin(receivedData)));
     }
   }, [receivedData]);
+
+  const onDone = (message) => {
+    onReadFinish(message);
+  };
 
   const handleCameraStream = async (images, updatePreview, gl) => {
     const loop = async () => {
@@ -189,8 +182,6 @@ export default function ReadingScreenTF({ onBack }) {
         <Text>Loading...</Text>
       </View>
     );
-  } else if (done) {
-    return <ShowMessage message={message} reMount={reMount} onBack={onBack} />;
   } else {
     return (
       <View style={styles.containerPortrait}>
@@ -209,10 +200,10 @@ export default function ReadingScreenTF({ onBack }) {
         {renderBulb()}
         {renderCameraTypeSwitcher()}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={onBack}>
-            <Text style={styles.buttonText}>Back</Text>
+          <TouchableOpacity style={styles.button} onPress={onReadStop}>
+            <Text style={styles.buttonText}>Stop</Text>
             <Ionicons
-              name={"arrow-back"}
+              name={"stop-outline"}
               size={20}
               color={"white"}
               style={styles.messageIcon}
@@ -230,7 +221,7 @@ const customStyles = (theme) => ({
     width: CAM_PREVIEW_WIDTH,
     height: CAM_PREVIEW_HEIGHT,
     marginTop:
-      Dimensions.get("window").height / 2 - CAM_PREVIEW_HEIGHT / 2 - 40,
+      Dimensions.get("window").height / 2 - CAM_PREVIEW_HEIGHT / 2 - 150,
   },
   containerLandscape: {
     position: "relative",

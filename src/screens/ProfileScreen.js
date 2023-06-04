@@ -31,7 +31,9 @@ export default function ProfileScreen() {
         </View>
         <View style={styles.userInfo}>
           <Text style={styles.userName}>
-            {userDetails?.firstName || "John Doe"}
+            {userDetails?.firstName
+              ? `${userDetails.firstName} ${userDetails.lastName}`
+              : "John Doe"}
           </Text>
           <Text style={styles.userFollowers}>1000 followers</Text>
         </View>

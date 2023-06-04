@@ -1,20 +1,27 @@
 import React from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, View } from "react-native";
 
-export default LoadingScreen = ({ title, style = {}, ...props }) => {
-  return <Text style={{ ...style }}>{title ? title : "Loading....."}</Text>;
+export default LoadingScreen = ({ title, ...props }) => {
+  return (
+    <View style={defaultStyles.loadingContainer}>
+      <Text style={defaultStyles.loading}>
+        {title ? title : "Loading....."}
+      </Text>
+    </View>
+  );
 };
 
 const defaultStyles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   loading: {
     backgroundColor: "#f1f1f1",
-    width: "80%",
-    fontSize: 16,
+    fontSize: 24,
     paddingVertical: 10,
     paddingHorizontal: 20,
     margin: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#89b3c0",
   },
 });
