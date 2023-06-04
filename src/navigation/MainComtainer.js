@@ -5,7 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { StyleSheet } from "react-native";
 // Screens
-import HomeScreen from "../screens/ProfileScreen";
+
 import SettingsScreen from "../screens/SettingsScreen";
 import SendStack from "./SendStack";
 import appStyles from "../styles/appStyles";

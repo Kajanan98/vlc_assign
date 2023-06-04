@@ -121,7 +121,7 @@ export default function MessageScreen({ navigation, route }) {
         <View style={styles.userCard}>
           <View>
             <Image
-              source={require("../../assets/images/profile.jpg")}
+              source={require("../../assets/images/profile.png")}
               style={styles.userPhoto}
             />
           </View>

@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  TextInput
 } from "react-native";
 
 //components
@@ -21,7 +22,7 @@ import { AuthContext } from "../../contexts/AuthProvider";
 
 const ContactScreen = ({ navigation }) => {
   const styles = useStyle(customStyles);
-  const { user } = useContext(AuthContext);
+ 
   const [loading, setLoading] = useState(true);
   const [allUsers, setAllUsers] = useState([]);
   const [friends, setFriends] = useState([
@@ -31,7 +32,7 @@ const ContactScreen = ({ navigation }) => {
       lastName: "Wayne",
       email: "@bruce",
       friends: 5,
-      image: "../assets/images/profile.jpg",
+      image: "../",
     },
     {
       id: 2,
@@ -42,6 +43,8 @@ const ContactScreen = ({ navigation }) => {
       image: "../assets/images/profile.jpg",
     },
   ]);
+
+  const { logout, deleteAccount, user, userDetails } = useContext(AuthContext);
 
   useEffect(() => {
     const onResult = (querySnapshot) => {
@@ -87,18 +90,48 @@ const ContactScreen = ({ navigation }) => {
   );
 
   if (loading) {
+    console.log("userDetails",userDetails)
     return <LoadingScreen />;
+
   } else {
     return (
       <View style={styles.container}>
-        <SearchBar />
-        <FlatList
-          data={allUsers}
-          style={styles.friendList}
-          renderItem={renderFriendItem}
-          //keyExtractor={(item) => item.username.toString()}
-          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 100 }}
+         <View style={styles.userContainer}>
+        <View style={styles.header}>
+          <Text style={styles.name}> {userDetails?.firstName
+              ? `${userDetails.firstName} ${userDetails.lastName}`
+              : "John Doe"}
+          </Text>
+          <Text style={styles.subText}>{userDetails?.email}</Text>
+        </View>
+        <Text style={styles.signOutText} onPress={logout}>
+            Sign Out
+        </Text>
+      </View>
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search"
+          //value={searchText}
+          // onChangeText={handleSearch}
         />
+      </View>
+       
+         <FlatList
+        data={allUsers}
+        renderItem={({ item }) => (
+          <TouchableOpacity>
+          <View style={styles.itemContainer}>
+            <Image style={styles.image} source={require('../../assets/images/profile.png')} />
+            <View style={styles.textContainer}>
+              <Text style={styles.nameText}>{item.firstName} {} {item.lastName}</Text>
+              <Text style={styles.phoneText}>{item.email}</Text>
+            </View>
+          </View>
+          </TouchableOpacity>
+        )}
+        keyExtractor={item => item.id.toString()}
+      />
         {/* <TouchableOpacity style={styles.continueButton}>
           <Text style={styles.continueButtonText}> See More</Text>
         </TouchableOpacity> */}
@@ -107,31 +140,79 @@ const ContactScreen = ({ navigation }) => {
   }
 };
 
-const customStyles = (theme) => ({
+
+const customStyles = theme => ({
   container: {
     flex: 1,
-    backgroundColor: "#f7f7f7",
-    paddingTop: 40,
+    backgroundColor: '#fff',
   },
-  friendList: {
+  header: {
+    backgroundColor:'#fff',
+    justifyContent: 'center',
+  },
+  userContainer:{
+   
+    padding:10,
+    flexDirection:'row',
+    justifyContent:'space-between',
+  },
+  signOutText:{
+    padding:10,
+    paddingTop:20,
+    color: theme.colors.danger,
+    // fontWeight:800
+  },
+  name: {
+    fontSize:20,
+    // fontWeight:'bold',
+    marginLeft:20,
+    marginBottom:3,
+  },
+  subText: {
+    fontSize:14,
+    marginLeft:20,
+    color:'#808080'
+  },
+  searchContainer: {
+    backgroundColor: '#eee',
+    padding: 8,
+    
+  },
+  searchInput: {
+    height: 40,
+    borderColor: 'white',
+    borderWidth: 1,
+    padding: 8,
+  },
+  itemContainer: {
     flex: 1,
-    paddingTop: 16,
-  },
-  continueButton: {
-    position: "absolute",
-    bottom: 16,
-    left: 16,
-    right: 16,
-    backgroundColor: theme.colors.primary,
-    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
-    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
   },
-  continueButtonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
+  image: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    // backgroundColor: theme.colors.primary,
+    // tintColor: theme.colors.primary,
+    // borderColor: theme.colors.primary,
+    // borderWidth:1
+    
   },
-});
+  textContainer: {
+    marginLeft: 16,
+  },
+  nameText: {
+    fontSize: 16,
+    // fontWeight: 'bold',
+  },
+  phoneText: {
+    fontSize: 16,
+    color: '#999',
+  },
+})
 
 export default ContactScreen;

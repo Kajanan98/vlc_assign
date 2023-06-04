@@ -1,80 +1,94 @@
-import React from 'react'
-import { 
-  SafeAreaView, 
-  View, 
-  Text, 
-  TouchableOpacity
-} from 'react-native';
-
-import { MaterialIcons } from "@expo/vector-icons";
-import OnBoarding from '../assets/svg/onBoarding';
-
+import React from 'react';
+import { StyleSheet, View, Image, TouchableOpacity, Text } from 'react-native';
 import useStyle from '../hooks/useStyles';
 
-const OnboardingScreen = ({navigation}) => {
+
+const WelcomeScreen = ({navigation}) => {
 
   const styles = useStyle(customStyles);
-
   return (
-    <SafeAreaView
-      style={styles.container}>
-      <View style={{marginTop: 20}}>
-        <Text
-          style={styles.appName}>
-          VLC
-        </Text>
-      </View>
-     
-      <View style={{flex: 1, justifyContent: 'center'}}>
-        <OnBoarding
-          height={350}
-          fill = {'black'}
-        />  
-      </View>
-      <View style={{alignItems:'center'}}>
-      <TouchableOpacity
-        style={styles.navigateButton}
-        onPress={() => navigation.navigate("LoginScreen")}>
-        <Text
-          style={styles.navigateText}>
-          Let's Begin
-        </Text>
-        <MaterialIcons name="arrow-forward-ios" size={22} color="#fff" />
-      </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+    <View style={styles.container}>
+        <View style={styles.content}>
+            <Text style={styles.title}>Welcome to LightChat!</Text>
+            <Image source={{uri:'https://bootdey.com/img/Content/avatar/avatar3.png'}} style={styles.image} />
+            <Text style={styles.desc}>{'Please log in to continue'}</Text>
+        </View>
+        <View style={styles.buttonsContainer}>
+            <TouchableOpacity 
+                style={[styles.button, styles.login]}
+                onPress={()=> navigation.navigate('LoginScreen')}
+            >
+                <Text style={styles.buttonText}>Login </Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+                style={[styles.button, styles.signUp]}
+                onPress={()=> navigation.navigate('SignUpScreen')}
+            >
+                <Text style={styles.signUpText}>SignUp</Text>
+            </TouchableOpacity>
+        </View>
+    </View>
   );
 };
 
-export default OnboardingScreen;
+const customStyles = theme => ({
+    container: {
+        flex: 1,
+        justifyContent:'center',
+        backgroundColor: '#fff',
+    },
+    content :{
+        alignItems:'center',
+        
+    },
+    title:{
+        fontSize:24,
+        color:theme.colors.primary,
+        fontWeight:'bold',
+    },
+    image:{
+        width:120,
+        height:120,
+        borderRadius:60,
+        marginTop:39,
+    },
+    desc:{
+        fontSize:18,
+        textAlign:'center',
+        marginTop:30,
+        color:'#808080'
+    },
+    buttonsContainer:{
+        marginHorizontal:30,
+        marginTop:50,
+        alignItems:'center',
+        justifyContent:'center'
+    },
+    button:{
+        width: '70%',
+        height:50,
+        borderRadius:25,
+        alignItems:'center',
+        justifyContent:'center',
+        margin:10
+    },
+    buttonText:{
+        color:'#fff',
+        fontWeight:'bold',
+    },
+    login:{
+        backgroundColor: theme.colors.primary,
+    },
+    signUp:{
+        
+        color: theme.colors.primary,
+        borderColor:theme.colors.primary,
+        borderWidth: 2
+    },
+    signUpText:{
+        color: theme.colors.primary,
+        fontWeight:'bold',
+    }
+});
 
-const customStyles = (theme) => ({
-  container:{
-    flex: 1,
-    justifyContent:'center',
-    
-  },
-  appName:{
-    fontWeight: 'bold',
-    fontSize: 30,
-    color:  theme.colors.primary,
-    textAlign:'center',
-    paddingTop:50
-    
-  },
-  navigateText: {
-    color: 'white',
-    fontSize: 18,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  navigateButton:{
-    backgroundColor:  theme.colors.primary,
-    padding: 20,
-    width: '90%',
-    borderRadius: 10,
-    marginBottom: 50,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  }
-})
+export default WelcomeScreen;

@@ -109,35 +109,47 @@ export default function SendingScreen({ navigation, route }) {
           flashMode={flashMode}
         >
           <View style={styles.container}>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button} onPress={onBack}>
-                <Ionicons
-                  name={"arrow-back"}
-                  size={20}
-                  color={"white"}
-                  style={styles.messageIcon}
-                />
-                <Text style={styles.buttonText}>Back</Text>
-              </TouchableOpacity>
-            </View>
-
-            <Message message={message} />
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={styles.button}
-                disabled={!finished}
-                onPress={() => sendData()}
-              >
-                <Text style={styles.buttonText}>Retry</Text>
-                <Ionicons
-                  name={"refresh"}
-                  size={20}
-                  color={"white"}
-                  style={styles.messageIcon}
-                />
-              </TouchableOpacity>
-            </View>
+          
+          
+          
+          <View style={styles.buttonContainer}>
+          <TouchableOpacity
+              style={styles.button} 
+              onPress={() => sendData()} 
+                    
+            >      
+              <Text style={styles.buttonText}>
+                Retry
+                
+              </Text>
+              <Ionicons
+                name={ "refresh" }
+                size={20}
+                color={"white"}
+                style={styles.messageIcon}
+              />
+          </TouchableOpacity>
           </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.button} 
+              onPress={onBack} 
+                    
+            >  
+              <Ionicons
+                name={ "arrow-back" }
+                size={20}
+                color={"white"}
+                style={styles.messageIcon}
+              />    
+              <Text style={styles.buttonText}>
+                Back
+                
+              </Text>
+              
+            </TouchableOpacity>
+          </View>
+        </View>
         </Camera>
       </View>
     );
@@ -176,7 +188,7 @@ const customStyles = theme =>({
   buttonText:{
     color:'#ffffff',
     paddingRight:5,
-    fontWeight:'800'
+    // fontWeight:800
   },
   messageIcon:{
     

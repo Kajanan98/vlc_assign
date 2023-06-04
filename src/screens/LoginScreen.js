@@ -7,6 +7,8 @@ import { Text, Alert, Button, View, StyleSheet,
     TouchableOpacity
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 
 import { AuthContext } from '../contexts/AuthProvider';
 
@@ -24,7 +26,7 @@ import useStyles from "../hooks/useStyles"
 
 export default function LoginScreen({navigation}) {
 
-  const styles = useStyles(loginStyles);
+  const styles = useStyles(customStyles);
 
 
   const schema = yup.object().shape({
@@ -54,226 +56,176 @@ export default function LoginScreen({navigation}) {
 
 
 
-  useEffect(() => {
-     const keyboardDidShowListener = Keyboard.addListener(
-       'keyboardDidShow',
-       () => {
-         setKeyboardVisible(true); // or some other action
-       }
-     );
-     const keyboardDidHideListener = Keyboard.addListener(
-       'keyboardDidHide',
-       () => {
-         setKeyboardVisible(false); // or some other action
-       }
-     );
- 
-     return () => {
-       keyboardDidHideListener.remove();
-       keyboardDidShowListener.remove();
-     };
-   }, []);
 
-   const onSubmitHandler = (data) => {
+
+   const handleLoginPress = (data) => {
     console.log({ data });
     // Perform any necessary actions with the form data
     login(data)
   };
  
 
-    return (
-          
-            <View style={styles.container}>
-              
-              <KeyboardAvoidingView style={styles.content}  behavior="padding">
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                  <View style={styles.subContainer}>
-                    {/* <View>
-                      <TouchableOpacity onPress={() => navigation.navigate("OnboardingScreen")} style={styles.backButton}>
-                        <Ionicons name="arrow-back" size={24} color='#24a0ed' />
-                      </TouchableOpacity>
-                    </View> */}
-                    { !isKeyboardVisible ? 
-                      <Login
-                        height={300}
-                       
-                      />
-                    :
-                      <Text style={styles.logoText}>Login</Text>
-                    }
-                    <View style={styles.inputContainer}>
-                      <TextInput
-                        placeholder="Email"
-                        placeholderTextColor="#666666"
-                        name = "email"
-                        autoCapitalize="none"
-                        onChangeText={(text) => setValue('email',  text )}
-                        label='Email'
-                        style={styles.input}
-                      />
-                    </View>
-                    { errors.email ?
-                      <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>{errors.email?.message }</Text>
-                      </Animatable.View>
-                        :
-                      null
-                    }
-
-                    <View style={styles.inputContainer}>
-                  
-                      <TextInput
-                        placeholder="Password"
-                        placeholderTextColor="#666666"
-                        label="Password"
-                        secureTextEntry={!view}
-                        style={styles.input}
-                        autoCapitalize="none"
-                        name = "password"
-                        onChangeText={(text) => setValue('password',  text )}
-                      />
-                      <TouchableOpacity onPress={() => setView(!view)} style={styles.eyeIconContainer}>
-                          { !view ? (
-                          <Feather name="eye-off" color="grey" size={20} />
-                          ) : (
-                          <Feather name="eye" color="grey" size={20} />
-                          )}
-                      </TouchableOpacity>
-                    </View>
-                    {   errors.password?.message ?
-
-                      <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>{errors.password?.message}</Text>
-                      </Animatable.View>
-                        :
-                        null
-                    }
-                      
-                    <TouchableOpacity 
-                      style={styles.loginButton}
-                      onPress={handleSubmit(onSubmitHandler)}
-                    >
-                      <Text style={styles.buttonText}>Login</Text>
-                    </TouchableOpacity>
-                    <View style={styles.guideContainer}>
-                      <Text >
-                        Create New Account?
-                        <Text 
-                          onPress={() => navigation.navigate('RegisterScreen')}
-                          allowFontScaling={false}
-                          style={styles.guideText}
-                        >
-                          {`\u00A0`}
-                          SignUp
+  return (
+    <KeyboardAwareScrollView style={styles.scrollContainer}>
+      <View style={styles.container}>
+        <View style={styles.logoContainer}>
+          <Login
+            height="250"
+            width="250"
+            style={styles.logo}
+          />
+        </View>
+        <View style={styles.card}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              name = "email"
+              autoCapitalize="none"
+              onChangeText={(text) => setValue('email',  text )}
+              label='UserName'
+            />
+          </View>
+          { errors.email ?            
+            <Text style={styles.errorMsg}>{errors.email?.message }</Text>
+            :
+            null
+          }
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              autoCapitalize="none"
+              name = "password"
+              onChangeText={(text) => setValue('password',  text )}
+              secureTextEntry={true}
+            />
+          </View>
+          {   errors.password?.message ?
+            <Text style={styles.errorMsg}>{errors.password?.message}</Text>
+            :
+            null
+          }
+          <TouchableOpacity style={styles.button} onPress={handleSubmit(handleLoginPress)}>
+            <Text style={styles.buttonText}>Log In</Text>
+          </TouchableOpacity>
+          <View style={styles.guideContainer}>
+                        <Text >
+                          Create New Account?
+                          <Text 
+                            onPress={() => navigation.navigate('SignUpScreen')}
+                            allowFontScaling={false}
+                            style={styles.guideText}
+                          >
+                            {`\u00A0`}
+                            SignUp
+                          </Text>
+                            
                         </Text>
-                          
-                      </Text>
-                    </View>
-                   
-                  </View> 
-                </TouchableWithoutFeedback>
-              </KeyboardAvoidingView>
-            </View>
-
-        
-     
-    )
+                      </View>
+        </View>
+      </View>
+      </KeyboardAwareScrollView> 
+    );
+  };
   
-}
-
-const loginStyles = (theme) =>({
-  container: {
-    
-    flex:1,
-    justifyContent: 'center',
-    // backgroundColor: "#eaeaea",
-    // abackgroundColor: '#00FFFF',
-  },
-  content:{
-    
-  },
-  backButton:{
-   
-    color:theme.colors.primary,
-  },
-  input: {
-    height: 50,
-    fontSize: 14,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: "#eaeaea",
-    backgroundColor: "#fafafa",
-    paddingLeft: 10,
-    marginTop: 5,
-    marginBottom: 5,
-    height: 50,
-    padding: 10,
-    
-  },
-  subContainer:{
-    margin:25,
-    marginTop: 5
-  },
-  logoText: {
-    fontSize: 40,
-    fontWeight: "800",
-    marginTop: 150,
-    marginBottom: 30,
-    textAlign: "center",
-    alignItems:'center',
-    color: theme.colors.primary
-  },
-  loginButton: {
-    backgroundColor: theme.colors.primary,
-    borderRadius: 5,
-    height: 50,
-    marginTop: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonText:{
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  guideContainer:{
-    marginTop:25,
-    alignItems: 'center',
-    justifyContent:'center',
-    
-  },
-  guideText:{
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: theme.colors.primary
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 50,
-    fontSize: 14,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: "#eaeaea",
-    backgroundColor: "#fafafa",
-    paddingLeft: 10,
-    marginTop: 5,
-    marginBottom: 5,
-    padding: 10,
-  },
-  input: {
-    flex: 1,
-    height: 40,
-    color: '#000000',
-    paddingLeft: 10,
-  },
-  eyeIconContainer: {
-    paddingRight: 10,
-  },
-  errorMsg:{
-    color: theme.colors.danger,
-    fontSize: 14,
-  }
-
-})
+  const customStyles = theme => ({
+    scrollContainer:{
+      backgroundColor: theme.colors.background,
+    },
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      
+    },
+    logoContainer: {
+      alignItems: 'center',
+      marginTop: 120,
+      marginBottom:10,
+    },
+    logo: {
+      width: 120,
+      height: 120,
+      borderRadius:60,
+      resizeMode: 'contain',
+  
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
+    card: {
+      borderRadius: 10,
+      backgroundColor: '#eee',
+      margin: 10,
+      padding: 15,
+      width: '80%',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    inputContainer: {
+      borderRadius: 10,
+      backgroundColor: '#eee',
+      margin: 10,
+      padding: 15,
+      width: '80%',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
+    input: {
+      fontSize: 16,
+    },
+    button: {
+      marginTop: 10,
+      backgroundColor: theme.colors.primary,
+      borderRadius: 10,
+      padding: 15,
+      width: '80%',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
+    buttonText: {
+      fontSize: 16,
+      color: '#fff',
+      textAlign: 'center',
+    },
+    errorMsg:{
+      color: theme.colors.danger,
+      fontSize: 14,
+    },
+    guideContainer:{
+      marginTop:25,
+      alignItems: 'center',
+      justifyContent:'center',
+      
+    },
+    guideText:{
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: theme.colors.primary
+    },
+  });

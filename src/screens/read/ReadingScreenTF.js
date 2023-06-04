@@ -27,7 +27,7 @@ const IS_ANDROID = Platform.OS === "android";
 const IS_IOS = Platform.OS === "ios";
 
 const CAM_PREVIEW_WIDTH = Dimensions.get("window").width;
-const CAM_PREVIEW_HEIGHT = CAM_PREVIEW_WIDTH / (IS_IOS ? 9 / 16 : 3 / 4);
+const CAM_PREVIEW_HEIGHT = Dimensions.get("window").height-80; //CAM_PREVIEW_WIDTH / (IS_IOS ? 9 / 16 : 3 / 4);
 
 const OUTPUT_TENSOR_WIDTH = 180;
 const OUTPUT_TENSOR_HEIGHT = OUTPUT_TENSOR_WIDTH / (IS_IOS ? 9 / 16 : 3 / 4);
@@ -41,7 +41,7 @@ export default function ReadingScreenTF({ onBack }) {
   const [message, setMessage] = useState(null);
   const [fps, setFps] = useState(0);
   const [spot, setSpot] = useState(0);
-  const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
+  const [cameraType, setCameraType] = useState(Camera.Constants.Type.front);
   const [receivedData, setReceivedData] = useState([]);
 
   const { model } = useContext(AuthContext);
@@ -163,7 +163,7 @@ export default function ReadingScreenTF({ onBack }) {
         style={styles.cameraTypeSwitcher}
         onTouchEnd={handleSwitchCameraType}
       >
-        <Text>Switch Camera</Text>
+        <Text>Switch Side</Text>
       </View>
     );
   };
@@ -266,6 +266,7 @@ const customStyles = (theme) => ({
     borderRadius: 2,
     padding: 8,
     zIndex: 20,
+    display:'none'
   },
   bulbContainer: {
     position: "absolute",
@@ -290,6 +291,7 @@ const customStyles = (theme) => ({
     borderRadius: 2,
     padding: 8,
     zIndex: 20,
+    backgroundColor: theme.colors.primary,
   },
   buttonContainer: {
     alignItems: "center",
