@@ -11,7 +11,7 @@ import { AuthContext } from "../contexts/AuthProvider";
 
 function Main() {
 
-  const {isLoggedIn, login, logout} = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
 
   return (
     <NavigationContainer>

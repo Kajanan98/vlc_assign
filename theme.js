@@ -5,6 +5,7 @@ const theme = {
       danger: "#ed2424",
       success: "#52c41a",
       warning: "#fadb14",
+      background: "#1d77b9"
     },
     fonts: {
       regular: "Arial",

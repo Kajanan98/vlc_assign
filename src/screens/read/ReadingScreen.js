@@ -1,13 +1,19 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { Text } from "react-native";
+import { Camera } from "expo-camera";
+import ReadingScreenTF from "./ReadingScreenTF";
 
-import ReadingScreen1 from "./ReadingScreen1";
-// import ReadingScreen2 from "./ReadingScreen2";
-// import ReadingScreen3 from "./ReadingScreen3";
-
-export default function ReadingScreen() {
+export default function ReadingScreen({navigation}) {
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [hasMicrophonePermission, setHasMicrophonePermission] = useState();
+
+  const onBack = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Read" }],
+    });
+  };
 
   useEffect(() => {
     (async () => {
@@ -26,8 +32,8 @@ export default function ReadingScreen() {
     hasCameraPermission === undefined ||
     hasMicrophonePermission === undefined
   ) {
-    return <ReadingScreen1 />;
-  } else if (!hasCameraPermission) {
     return <Text>Permission for camera not granted.</Text>;
+  } else {
+    return <ReadingScreenTF onBack={onBack}/>;
   }
 }

@@ -13,31 +13,36 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import useStyle from '../hooks/useStyles';
 
 
-const FriendCard = ({ name, username, friends }) => {
-
-  const styles = useStyle(customStyles)
+const FriendCard = ({ name, email, friends, onContactPress, id }) => {
+  const styles = useStyle(customStyles);
 
   return (
     <View style={styles.friendCard}>
-      <Image source={require('../assets/images/profile.jpg')} style={styles.friendImage} />
+      <Image
+        source={require("../assets/images/profile.jpg")}
+        style={styles.friendImage}
+      />
       <View style={styles.friendInfo}>
         <Text style={styles.friendName}>{name}</Text>
         {/* <View style={styles.line} /> */}
-        <View style={{flexDirection:'row', alignItems: 'flex-end'}}>
-            <View style={{ flex:6}}>
-                <Text style={styles.friendUserName}> {username}</Text>
-                <Text style={styles.friends}>{friends} <Text style={styles.friendsText}>mutual Friends</Text></Text>
-            </View>
-            <View style={[styles.friendMessage, { flex:1, transform: [{ translateY: -8 }]}]}>
-                <TouchableOpacity  >
-                    <FontAwesome
-                        name={ "send" }
-                        size={28}
-                        style={styles.messageIcon}
-                        />
-                </TouchableOpacity> 
-            </View>
-      </View>
+        <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
+          <View style={{ flex: 6 }}>
+            <Text style={styles.friendUserName}> {email}</Text>
+            <Text style={styles.friends}>
+              {friends} <Text style={styles.friendsText}>mutual Friends</Text>
+            </Text>
+          </View>
+          <View
+            style={[
+              styles.friendMessage,
+              { flex: 1, transform: [{ translateY: -8 }] },
+            ]}
+          >
+            <TouchableOpacity onPress={() => onContactPress(id)}>
+              <FontAwesome name={"send"} size={28} style={styles.messageIcon} />
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     </View>
   );

@@ -1,3 +1,4 @@
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import appStyles from "../styles/appStyles";
 import ReadScreen from "../screens/read/ReadScreen";

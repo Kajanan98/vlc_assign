@@ -7,100 +7,95 @@ import { StyleSheet } from "react-native";
 
 // Screens
 import ProfileScreen from "../screens/ProfileScreen";
-import ContactScreen from "../screens/ContactScreen";
 import SendStack from "./SendStack";
 import appStyles from "../styles/appStyles";
 import ReadStack from "./ReadStack";
-
-
+import HomeStack from "./HomeStack";
 
 const Tab = createBottomTabNavigator();
 
 function AppStack() {
   return (
-    
-      
-      <Tab.Navigator
-        initialRouteName={"HomeStack"}
-        screenOptions={({ route }) => ({
-          tabBarStyle: { ...styles.tabBarNormal },
-          tabBarLabelStyle: {
-            paddingBottom: 10,
-            paddingTop: 0,
-            marginTop: -5,
-            fontSize: 11,
+    <Tab.Navigator
+      initialRouteName={"HomeStack"}
+      screenOptions={({ route }) => ({
+        tabBarStyle: { ...styles.tabBarNormal },
+        tabBarLabelStyle: {
+          paddingBottom: 10,
+          paddingTop: 0,
+          marginTop: -5,
+          fontSize: 11,
+        },
+        headerStyle: appStyles.headerStyle,
+        headerTitleAlign: "center",
+        unmountOnBlur: true,
+      })}
+    >
+      <Tab.Screen
+        name={"HomeStack"}
+        component={HomeStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, size, color }) => {
+            return (
+              <Ionicons
+                name={focused ? "home" : "home-outline"}
+                size={size}
+                color={color}
+              />
+            );
           },
-          headerStyle: appStyles.headerStyle,
-          headerTitleAlign: "center",
-        })}
-      >
-        <Tab.Screen
-          name={"HomeStack"}
-          component={ContactScreen}
-          options={{
-            title: "Home",
-            headerShown: false,
-            tabBarIcon: ({ focused, size, color }) => {
-              return (
-                <Ionicons
-                  name={focused ? "home" : "home-outline"}
-                  size={size}
-                  color={color}
-                />
-              );
-            },
-          }}
-        />
-        <Tab.Screen
-          name={"SendStack"}
-          component={SendStack}
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ focused, size, color }) => {
-              return (
-                <FontAwesome
-                  name={focused ? "send" : "send-o"}
-                  size={size}
-                  color={color}
-                />
-              );
-            },
-          }}
-        />
-        <Tab.Screen
-          name={"ReadStack"}
-          component={ReadStack}
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ focused, size, color }) => {
-              return (
-                <Ionicons
-                  name={focused ? "scan" : "scan-outline"}
-                  size={size}
-                  color={color}
-                />
-              );
-            },
-          }}
-        />
-        <Tab.Screen
-          name={"Profile"}
-          component={ProfileScreen}
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ focused, size, color }) => {
-              return (
-                <FontAwesome
-                  name={focused ? "user" : "user-o"}
-                  size={size}
-                  color={color}
-                />
-              );
-            },
-          }}
-        />
-      </Tab.Navigator>
-  
+        }}
+      />
+      <Tab.Screen
+        name={"SendStack"}
+        component={SendStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, size, color }) => {
+            return (
+              <FontAwesome
+                name={focused ? "send" : "send-o"}
+                size={size}
+                color={color}
+              />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name={"ReadStack"}
+        component={ReadStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, size, color }) => {
+            return (
+              <Ionicons
+                name={focused ? "scan" : "scan-outline"}
+                size={size}
+                color={color}
+              />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name={"Profile"}
+        component={ProfileScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, size, color }) => {
+            return (
+              <FontAwesome
+                name={focused ? "user" : "user-o"}
+                size={size}
+                color={color}
+              />
+            );
+          },
+        }}
+      />
+    </Tab.Navigator>
   );
 }
 
