@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import {
   StyleSheet,
@@ -16,58 +16,95 @@ import FriendCard from "../../components/FriendCard";
 //hooks
 import useStyle from "../../hooks/useStyles";
 import firestore from "@react-native-firebase/firestore";
+import LoadingScreen from "../../components/LoadingScreen";
+import { AuthContext } from "../../contexts/AuthProvider";
 
-const ContactScreen = () => {
+const ContactScreen = ({ navigation }) => {
   const styles = useStyle(customStyles);
+  const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
+  const [allUsers, setAllUsers] = useState([]);
   const [friends, setFriends] = useState([
     {
       id: 1,
-      name: "Master Bruce Wayne",
-      username: "@bruce",
+      firstName: "Master Bruce",
+      lastName: "Wayne",
+      email: "@bruce",
       friends: 5,
       image: "../assets/images/profile.jpg",
     },
     {
       id: 2,
-      name: "Master Bruce Wayne",
-      username: "@brucee",
+      firstName: "Master Bruce",
+      lastName: "Wayne",
+      email: "@bruce",
       friends: 5,
       image: "../assets/images/profile.jpg",
     },
   ]);
 
   useEffect(() => {
-    (async () => {
-      const users = await firestore().collection("Users").get();
-      // setFriends(users);
+    const onResult = (querySnapshot) => {
+      let users = [];
+      querySnapshot.forEach((documentSnapshot) => {
+        users.push({
+          id: documentSnapshot.id,
+          ...documentSnapshot.data(),
+          friends: 5,
+          image: "../assets/images/profile.jpg",
+        });
+      });
+      setAllUsers(users);
       setLoading(false);
-    })();
+    };
+
+    function onError(error) {
+      console.log(error);
+    }
+
+    const subscriper = firestore()
+      .collection("Users")
+      .where("__name__", "!=", user.uid)
+      .onSnapshot(onResult, onError);
+
+    return () => subscriper();
   }, []);
+
+  const onContactPress = (id) => {
+    navigation.navigate("Message", {
+      user: allUsers.find((user) => user.id == id),
+    });
+  };
 
   const renderFriendItem = ({ item }) => (
     <FriendCard
-      name={item.name}
-      username={item.username}
+      name={`${item.firstName} ${item.lastName}`}
+      email={item.email}
       friends={item.friends}
+      id={item.id}
+      onContactPress={onContactPress}
     />
   );
 
-  return (
-    <View style={styles.container}>
-      <SearchBar />
-      <FlatList
-        data={friends}
-        style={styles.friendList}
-        renderItem={renderFriendItem}
-        //keyExtractor={(item) => item.username.toString()}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 100 }}
-      />
-      {/* <TouchableOpacity style={styles.continueButton}>
-        <Text style={styles.continueButtonText}> See More</Text>
-      </TouchableOpacity> */}
-    </View>
-  );
+  if (loading) {
+    return <LoadingScreen />;
+  } else {
+    return (
+      <View style={styles.container}>
+        <SearchBar />
+        <FlatList
+          data={allUsers}
+          style={styles.friendList}
+          renderItem={renderFriendItem}
+          //keyExtractor={(item) => item.username.toString()}
+          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 100 }}
+        />
+        {/* <TouchableOpacity style={styles.continueButton}>
+          <Text style={styles.continueButtonText}> See More</Text>
+        </TouchableOpacity> */}
+      </View>
+    );
+  }
 };
 
 const customStyles = (theme) => ({

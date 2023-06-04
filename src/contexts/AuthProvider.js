@@ -35,6 +35,7 @@ const AuthProvider = ({ children }) => {
           .set({
             firstName: data.firstName,
             lastName: data.lastName,
+            email: data.email,
           })
           .then(() => {
             console.log("User added!");
@@ -104,7 +105,25 @@ const AuthProvider = ({ children }) => {
         currentUser
           .delete()
           .then(() => console.log("User deleted"))
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            if (error.code === "auth/requires-recent-login") {
+              firestore()
+                .collection("Users")
+                .doc(user.uid)
+                .set({
+                  firstName: userDetails.firstName,
+                  lastName: userDetails.lastName,
+                  email: userDetails.email,
+                })
+                .then(() => {
+                  console.log(
+                    "This operation is sensitive and requires recent authentication. Log in again before retrying this request."
+                  );
+                });
+            } else {
+              console.log(error);
+            }
+          });
       });
   };
 
