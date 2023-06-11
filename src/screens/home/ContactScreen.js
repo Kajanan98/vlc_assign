@@ -12,7 +12,7 @@ import {
 
 //components
 import SearchBar from "../../components/SearchBar";
-import FriendCard from "../../components/FriendCard";
+
 
 //hooks
 import useStyle from "../../hooks/useStyles";

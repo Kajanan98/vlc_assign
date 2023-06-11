@@ -85,7 +85,7 @@ export default function ReadingScreenTF({ onBack }) {
   }, []);
 
   useEffect(() => {
-    const framesPerSecond = Math.max(4, fps);
+    const framesPerSecond = Math.max(10, fps);
     const zeros = (5 * unitTime) / (1000 / framesPerSecond);
     if (
       startedScanning &&
@@ -266,11 +266,11 @@ const customStyles = (theme) => ({
     borderRadius: 2,
     padding: 8,
     zIndex: 20,
-    display:'none'
+    // display:'none'
   },
   bulbContainer: {
     position: "absolute",
-    top: -70,
+    top: 70,
     right: 30,
     width: 60,
     height: 60,

@@ -29,16 +29,15 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     async function prepare() {
-      console.log("tf");
+    
       await tf.ready();
       // await tf.setBackend("cpu");
-      console.log("tf end");
+      
 
       const model = await mobilenet.load();
       setModel(model);
 
-      // Ready!
-      console.log("Prepare done in auth");
+     
     }
     prepare();
   }, []);
