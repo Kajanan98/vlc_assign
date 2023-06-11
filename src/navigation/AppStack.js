@@ -6,7 +6,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { StyleSheet } from "react-native";
 
 // Screens
-import ContactScreen from "../screens/home/ContactScreen";
+import ContactScreen from "../screens/home/Home";
 import SendStack from "./SendStack";
 import appStyles from "../styles/appStyles";
 import ReadStack from "./ReadStack";

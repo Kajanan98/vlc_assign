@@ -32,7 +32,7 @@ export default function ReadingScreen({navigation}) {
     hasCameraPermission === undefined ||
     hasMicrophonePermission === undefined
   ) {
-    return <Text>Permission for camera not granted.</Text>;
+    return <Text>Permission Plz.</Text>;
   } else {
     return <ReadingScreenTF onBack={onBack}/>;
   }

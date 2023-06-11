@@ -8,7 +8,7 @@ import { useEffect, useState ,useRef} from "react";
 import { Camera } from "expo-camera";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { encodeToBin } from "../../utils/morse";
+import { encodeToBin } from "../../utils/encode";
 import useStyle from "../../hooks/useStyles";
 import Message from "../../components/Message";
 
@@ -95,7 +95,7 @@ export default function SendingScreen({ navigation, route }) {
   }, []);
 
   if (!hasCameraPermission || !hasMicrophonePermission) {
-    return <Text>Permission for camera not granted.</Text>;
+    return <Text>Permission Plz.</Text>;
   } else {
     return (
       <View style={styles.container}>

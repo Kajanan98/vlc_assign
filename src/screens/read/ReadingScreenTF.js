@@ -20,14 +20,14 @@ import { decodeToBin, decodeBinToMessage } from "../../utils/vlc/decode";
 import ShowMessage from "./ShowMessage";
 import { AuthContext } from "../../contexts/AuthProvider";
 
-// tslint:disable-next-line: variable-name
+
 const TensorCamera = cameraWithTensors(Camera);
 
 const IS_ANDROID = Platform.OS === "android";
 const IS_IOS = Platform.OS === "ios";
 
 const CAM_PREVIEW_WIDTH = Dimensions.get("window").width;
-const CAM_PREVIEW_HEIGHT = Dimensions.get("window").height-80; //CAM_PREVIEW_WIDTH / (IS_IOS ? 9 / 16 : 3 / 4);
+const CAM_PREVIEW_HEIGHT = Dimensions.get("window").height-80; 
 
 const OUTPUT_TENSOR_WIDTH = 180;
 const OUTPUT_TENSOR_HEIGHT = OUTPUT_TENSOR_WIDTH / (IS_IOS ? 9 / 16 : 3 / 4);
@@ -53,19 +53,9 @@ export default function ReadingScreenTF({ onBack }) {
     async function prepare() {
       rafId.current = null;
 
-      // Camera permission.
       await Camera.requestCameraPermissionsAsync();
 
-      // // Wait for tfjs to initialize the backend.
-      // // console.log("tf");
-      // await tf.ready();
-      // // await tf.setBackend("cpu");
-      // // console.log("tf end");
-
-      // const model = await mobilenet.load();
-      // setModel(model);
-
-      // // Ready!
+      
       while (model == null) {
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
@@ -76,7 +66,7 @@ export default function ReadingScreenTF({ onBack }) {
   }, [model]);
 
   useEffect(() => {
-    // Called when the app is unmounted.
+    
     return () => {
       if (rafId.current != null && rafId.current !== 0) {
         rafId.current = 0;
@@ -102,7 +92,7 @@ export default function ReadingScreenTF({ onBack }) {
       if (done || rafId.current === 0) {
         return;
       }
-      // Get the tensor and run pose detection.
+      
       const imageTensor = images.next().value;
 
       if (!imageTensor) {
@@ -199,7 +189,6 @@ export default function ReadingScreenTF({ onBack }) {
           style={styles.camera}
           autorender={true}
           type={cameraType}
-          // tensor related props
           resizeWidth={OUTPUT_TENSOR_WIDTH}
           resizeHeight={OUTPUT_TENSOR_HEIGHT}
           resizeDepth={3}
