@@ -43,6 +43,7 @@ function AppStack() {
           name={"SendStack"}
           component={SendStack}
           options={{
+            title:'Send',
             headerShown: false,
             tabBarIcon: ({ focused, size, color }) => {
               
@@ -77,6 +78,7 @@ function AppStack() {
           name={"ReadStack"}
           component={ReadStack}
           options={{
+            title:'Receive',
             headerShown: false,
             tabBarIcon: ({ focused, size, color }) => {
               return (
